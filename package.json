@@ -1,0 +1,7 @@
+{
+  "name": "your-project",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo 'No test specified' && exit 1"  // Replace this with your actual test script
+  }
+}
