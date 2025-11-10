@@ -1,48 +1,68 @@
-name: Simple CI/CD Pipeline
+name: Build, Test, and Deploy
 
 on:
   push:
     branches:
-      - main  # Trigger when code is pushed to the `main` branch
+      - main
   pull_request:
     branches:
-      - main  # Trigger when a pull request is made to the `main` branch
+      - main
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # The runner operating system
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2  # Pulls the repository's code
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'  # Node.js version (adjust if needed)
-
-    - name: Install dependencies
-      run: npm install  # Install dependencies using npm
-
-    - name: Run tests
-      run: npm test  # Run your test suite with npm (make sure you have tests set up)
-
-  deploy:
+    name: 🏗️ Build
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2  # Pulls the repository's code
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-    - name: Install dependencies
-      run: npm install  # Install dependencies
+      - name: Install dependencies
+        run: npm install
 
-    - name: Deploy to production
-      run: |
-        echo "Deploying to production..."  # Replace this with actual deploy commands (e.g., to Heroku, AWS, etc.)
-      if: github.ref == 'refs/heads/main'  # Deploy only from `main` branch
+      - name: Build project
+        run: echo "Building project..." # replace with your build command if needed
+
+
+  test:
+    name: 🧪 Test
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+
+  deploy:
+    name: 🚀 Deploy
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy
+        run: |
+          echo "Deploying application..."
+          # Add your actual deploy commands here, e.g.:
+          # npm run deploy
+          # or scp files to your server
