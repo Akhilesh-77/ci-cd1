@@ -1,7 +1,7 @@
 {
-  "name": "your-project",
+  "name": "ci-cd1",
   "version": "1.0.0",
   "scripts": {
-    "test": "echo 'No test specified' && exit 1"  // Replace this with your actual test script
+    "test": "echo 'No test specified' && exit 1"  
   }
 }
